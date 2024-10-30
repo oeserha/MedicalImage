@@ -24,11 +24,10 @@ from src.dataloader_box import CancerDataset
 import src.medsam_run as medsam_run
 
 # Dataset using Box access
-client = dl_box.connection('T3RCQDbC80YZ0fdiXR0wFZel4kJpHPYg')
+# client = dl_box.connection('OHlIkdONIqbtEUWrsK0yyZDrvheSbvpU')
 mri_data = dl_box.get_mri_data(client)
 mri_data = dl_box.clean_mri_data(mri_data, client)
 train_data, test_data = dl_box.train_test(mri_data)
-
 os.makedirs("/home/haleigh/mri_pics/train")
 os.makedirs("/home/haleigh/mri_pics/test")
 batch_size = 16

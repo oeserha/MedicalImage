@@ -1,7 +1,5 @@
 # Dataloader & Box Integration
 
-from boxsdk import OAuth2
-from boxsdk import Client
 import pandas as pd
 import torch
 from PIL import Image
@@ -9,31 +7,14 @@ from torch.utils.data import Dataset
 import numpy as np
 from sklearn.model_selection import train_test_split
 
-# Setup connection
-def connection(access_token):
-    oauth = OAuth2(
-    client_id='4ux6qwjvcbp58iau0kgar3t2ceewq47x',
-    client_secret='pyYMweGpw6Y7W5WBiWE7bmxymJlDjqoB',
-    access_token=access_token,
-    )
-
-    # client secret for CCG: HURbXCj4tTe675E2hVcyiWPP5i22PPhN
-
-    client = Client(oauth)
-
-    return client
-
 # Access MRI data folder
-def get_mri_data(client):
+def get_mri_data(path = None):
+    if path not None:
+        FILE_PATH = path
+    else:
+        FILE_PATH = 'FileFromBox.xlsx'
 
-    SHARED_LINK_URL = 'https://app.box.com/file/1433849452284?s=swtqk78ia9uyl2lookmxh26pas75hgrk'
-    shared_item = client.get_shared_item(SHARED_LINK_URL)
-
-    with open('FileFromBox.xlsx', 'wb') as open_file:
-        client.with_shared_link(SHARED_LINK_URL, None).file(shared_item.id).download_to(open_file)
-        open_file.close()
-
-    mri_data = pd.read_excel('FileFromBox.xlsx')
+    mri_data = pd.read_excel(FILE_PATH)
     return mri_data
 
 # Additional Fields for MRI Data
@@ -42,32 +23,14 @@ def clean_mri_data(mri_data, client):
     mri_data['Start_Index'] = 0
     mri_data['Has MRI'] = ~mri_data['PNG filtered MRI'].isna()
     mri_data['Has Seg'] = ~mri_data['PNG segmentation'].isna()
+    mri_data = mri_data[(mri_data['Has MRI']) & (mri_data['Has Seg'])]
+
     folders = []
     for i in range(len(mri_data)):
-
-        brightness_folders = []
-        if mri_data['Has MRI'][i]:
-            try:
-                png = client.get_shared_item(mri_data['PNG filtered MRI'][i])
-
-                items = client.folder(png.id).get_items()
-                for item in items:
-                    brightness_folders.append(item.id)
-                    # brightness_items = client.folder(item.id).get_items()
-                    # imgs = []
-                    # for img in brightness_items:
-                    #     imgs.append(img.id)
-                    
-                    # brightness_folders.append((item.id, imgs))
-            except:
-                print(f"{mri_data['MRI/Patient ID'][i]} has error; verify folder addresses")
-            
+        brightness_folders = os.listdir(f"/home/haleigh/Documents/Segmentations/{mri_data['MRI/Patient ID'][i]}/MRI PNGs")
         folders.append(brightness_folders)
 
     mri_data['Brightness Folders'] = folders
-
-    # filter for only patients with both MRI and Seg PNG files ready
-    mri_data = mri_data[(mri_data['Has MRI']) & (mri_data['Has Seg'])]
 
     return mri_data
 
@@ -86,39 +49,28 @@ def train_test(mri_data):
     return train_data, test_data
 
 class CancerDataset(Dataset):
-    def __init__(self, labels, client, train = True, transform=None, target_transform=None):
+    def __init__(self, labels, path = "/home/haleigh/Documents/Segmentations/", train = True, transform=None, target_transform=None):
         self.img_labels = labels
         self.transform = transform
         self.target_transform = target_transform
         self.train = train
-        self.client = client
+        self.path = path
 
     def __len__(self):
         len = sum(self.img_labels['Total Images'])
         return int(len)
 
     def __getitem__(self, idx):
-        if self.train:
-            path = '/home/haleigh/mri_pics/train/'
-        else:
-            path = '/home/haleigh/mri_pics/test/'
         row = self.img_labels.loc[self.img_labels.Start_Index.where(self.img_labels.Start_Index >= idx).first_valid_index()]
         
         patient = row['MRI/Patient ID']
         bright_level = int((idx - row['Start_Index']) % len(row['Brightness Folders']))
         bright_id = row['Brightness Folders'][bright_level]
 
-        brightness_items = self.client.folder(bright_id).get_items()
-        imgs = []
-        for img in brightness_items:
-            imgs.append(img.id)
-
-        img_idx = int((idx - row['Start_Index']) % row['Number of Slices'])
-        with open(f'{path}png_{idx}.png', 'wb') as open_pic:
-            self.client.file(imgs[img_idx]).download_to(open_pic)
-            open_pic.close()
-
-        image = torch.Tensor(np.array(Image.open(f'{path}png_{idx}.png'), dtype='int16'))
+        img_path = f"{self.path}/{patient}/MRI PNGs/{bright_id}"
+        imgs = os.listdir(img_path)
+        img_idx = int((idx - row['Start_Index']) % row['Number of Slices']) # pad zeros?
+        image = torch.Tensor(np.array(Image.open(f'{img_path}/png_{idx}.png'), dtype='int16'))
         
         seg_folder = self.client.get_shared_item(row['PNG segmentation']).get_items()
         seg_ids = []
