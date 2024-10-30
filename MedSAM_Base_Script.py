@@ -19,20 +19,25 @@ import monai
 import shutil
 # from io import StringIO
 
-import src.dataloader_box as dl_box
-from src.dataloader_box import CancerDataset
+# import src.dataloader_box as dl_box
+import src.dataloader_local as dl_local
+from src.dataloader_local import CancerDataset
 import src.medsam_run as medsam_run
 
 # Dataset using Box access
 # client = dl_box.connection('OHlIkdONIqbtEUWrsK0yyZDrvheSbvpU')
-mri_data = dl_box.get_mri_data(client)
-mri_data = dl_box.clean_mri_data(mri_data, client)
-train_data, test_data = dl_box.train_test(mri_data)
-os.makedirs("/home/haleigh/mri_pics/train")
-os.makedirs("/home/haleigh/mri_pics/test")
+# mri_data = dl_box.get_mri_data(client)
+# mri_data = dl_box.clean_mri_data(mri_data, client)
+# os.makedirs("/home/haleigh/mri_pics/train")
+# os.makedirs("/home/haleigh/mri_pics/test")
+
+# Dataset using Local Files
+mri_data = dl_local.get_mri_data()
+mri_data = dl_local.clean_mri_data(mri_data)
+train_data, test_data = dl_local.train_test(mri_data)
 batch_size = 16
-train_dataset = CancerDataset(labels=train_data, client=client)
-test_dataset = CancerDataset(labels=test_data, client=client)
+train_dataset = CancerDataset(labels=train_data)
+test_dataset = CancerDataset(labels=test_data)
 train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 

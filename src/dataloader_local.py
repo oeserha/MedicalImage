@@ -6,28 +6,33 @@ from PIL import Image
 from torch.utils.data import Dataset
 import numpy as np
 from sklearn.model_selection import train_test_split
+import os
 
 # Access MRI data folder
 def get_mri_data(path = None):
-    if path not None:
+    if path is not None:
         FILE_PATH = path
     else:
         FILE_PATH = 'FileFromBox.xlsx'
 
-    mri_data = pd.read_excel(FILE_PATH)
+    mri_data = pd.read_excel(FILE_PATH, sheet_name="Completed Segmentations")
     return mri_data
 
 # Additional Fields for MRI Data
-def clean_mri_data(mri_data, client):
+def clean_mri_data(mri_data):
     mri_data['Total Images'] = mri_data['Number of Slices'] + mri_data['Number of Brightness Levels']
     mri_data['Start_Index'] = 0
     mri_data['Has MRI'] = ~mri_data['PNG filtered MRI'].isna()
     mri_data['Has Seg'] = ~mri_data['PNG segmentation'].isna()
     mri_data = mri_data[(mri_data['Has MRI']) & (mri_data['Has Seg'])]
 
+    mri_data.rename(columns={"MRI/Patient ID": "patient_id"}, inplace=True)
+    mri_data = mri_data.reset_index()
+    mri_dummy = "MRI PNGs"
+
     folders = []
     for i in range(len(mri_data)):
-        brightness_folders = os.listdir(f"/home/haleigh/Documents/Segmentations/{mri_data['MRI/Patient ID'][i]}/MRI PNGs")
+        brightness_folders = os.listdir(rf"/home/haleigh/Documents/Segmentations/{mri_data['patient_id'][i]}/{mri_dummy}")
         folders.append(brightness_folders)
 
     mri_data['Brightness Folders'] = folders
@@ -63,7 +68,7 @@ class CancerDataset(Dataset):
     def __getitem__(self, idx):
         row = self.img_labels.loc[self.img_labels.Start_Index.where(self.img_labels.Start_Index >= idx).first_valid_index()]
         
-        patient = row['MRI/Patient ID']
+        patient = row['patient_id']
         bright_level = int((idx - row['Start_Index']) % len(row['Brightness Folders']))
         bright_id = row['Brightness Folders'][bright_level]
 
