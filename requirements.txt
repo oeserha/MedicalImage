@@ -1,0 +1,11 @@
+numpy
+torch
+matplotlib
+boxsdk
+pandas
+Pillow
+scikit-learn
+torchvision
+segment_anything
+scikit-image
+monai
