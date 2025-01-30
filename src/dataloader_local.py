@@ -8,12 +8,15 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 import os
 
+#TODO: edit path
+PATH = "/home/haleigh/Documents/Segmentations/"
+
 # Access MRI data folder
 def get_mri_data(path = None):
     if path is not None:
         FILE_PATH = path
     else:
-        FILE_PATH = 'FileFromBox.xlsx'
+        FILE_PATH = 'seg_list.xlsx'
 
     mri_data = pd.read_excel(FILE_PATH, sheet_name="Completed Segmentations")
     return mri_data
@@ -32,7 +35,7 @@ def clean_mri_data(mri_data):
 
     folders = []
     for i in range(len(mri_data)):
-        brightness_folders = os.listdir(rf"/home/haleigh/Documents/Segmentations/{mri_data['patient_id'][i]}/{mri_dummy}")
+        brightness_folders = os.listdir(rf"{PATH}{mri_data['patient_id'][i]}/{mri_dummy}")
         folders.append(brightness_folders)
 
     mri_data['Brightness Folders'] = folders
@@ -54,7 +57,7 @@ def train_test(mri_data):
     return train_data, test_data
 
 class CancerDataset(Dataset):
-    def __init__(self, labels, path = "/home/haleigh/Documents/Segmentations/", train = True, transform=None, target_transform=None):
+    def __init__(self, labels, path = PATH, train = True, transform=None, target_transform=None):
         self.img_labels = labels
         self.transform = transform
         self.target_transform = target_transform
