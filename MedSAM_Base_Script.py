@@ -35,7 +35,7 @@ import src.medsam_run as medsam_run
 mri_data = dl_local.get_mri_data()
 mri_data = dl_local.clean_mri_data(mri_data)
 train_data, test_data = dl_local.train_test(mri_data)
-batch_size = 16
+batch_size = 4
 train_dataset = CancerDataset(labels=train_data)
 test_dataset = CancerDataset(labels=test_data)
 train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)

@@ -1,3 +1,6 @@
+import os
+os.chdir(r"/home/haleigh/Documents/MedicalImage")
+
 import numpy as np
 import torch
 import matplotlib.pyplot as plt
@@ -12,7 +15,7 @@ def medsam_base_run(test_loader, medsam_model, device):
         B, H, W = img.size()
         img_3c = img.repeat(3, 1, 1, 1).view(B, 3, H, W).to(device)
 
-        box_np = np.array([[0,0, W, H]]).to(device)
+        box_np = torch.Tensor(np.array([[0, 0, W, H]])).to(device)
 
         with torch.no_grad():
             image_embedding = medsam_model.image_encoder(img_3c) # (1, 256, 64, 64)

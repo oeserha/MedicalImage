@@ -75,21 +75,15 @@ class CancerDataset(Dataset):
         bright_level = int((idx - row['Start_Index']) % len(row['Brightness Folders']))
         bright_id = row['Brightness Folders'][bright_level]
 
+
         img_path = f"{self.path}/{patient}/MRI PNGs/{bright_id}"
         imgs = os.listdir(img_path)
-        img_idx = int((idx - row['Start_Index']) % row['Number of Slices']) # pad zeros?
-        image = torch.Tensor(np.array(Image.open(f'{img_path}/png_{idx}.png'), dtype='int16'))
+        img_idx = int((idx - row['Start_Index']) % row['Number of Slices']) + 1 # pad zeros?
+        img_idx = str(img_idx).zfill(5)
+        image = torch.Tensor(np.array(Image.open(f'{img_path}/png_{img_idx}.png'), dtype='int16'))
         
-        seg_folder = self.client.get_shared_item(row['PNG segmentation']).get_items()
-        seg_ids = []
-        for item in seg_folder:
-            seg_ids.append(item.id)
-
-        with open(f'{path}seg_{idx}.png', 'wb') as open_pic:
-            self.client.file(seg_ids[img_idx]).download_to(open_pic)
-            open_pic.close()
-
-        label = torch.Tensor(np.array(Image.open(f'{path}seg_{idx}.png'), dtype='int16'))
+        seg_path = f"{self.path}/{patient}/Seg PNGs"
+        label = torch.Tensor(np.array(Image.open(f'{seg_path}/segpng_{img_idx}.png'), dtype='int16'))
 
         value_to_class = {
             9362: 0, # Background
