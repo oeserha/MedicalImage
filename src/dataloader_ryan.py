@@ -82,3 +82,48 @@ class CancerDataset(Dataset):
             return None 
 
         return image, label_classes, patient, bright_level 
+
+def get_mri_data(path = None):
+    if path is not None:
+        FILE_PATH = path
+    else:
+        FILE_PATH = 'seg_list.xlsx'
+
+    mri_data = pd.read_excel(FILE_PATH, sheet_name="Completed Segmentations")
+    return mri_data
+
+# Additional Fields for MRI Data
+def clean_mri_data(mri_data, path):
+    mri_data['Total Images'] = mri_data['Number of Slices'] * mri_data['Number of Brightness Levels']
+    mri_data['Start_Index'] = 0
+    mri_data['Has MRI'] = ~mri_data['PNG filtered MRI'].isna()
+    mri_data['Has Seg'] = ~mri_data['PNG segmentation'].isna()
+    mri_data = mri_data[(mri_data['Has MRI']) & (mri_data['Has Seg'])]
+
+    mri_data.rename(columns={"MRI/Patient ID": "patient_id"}, inplace=True)
+    mri_data = mri_data.reset_index()
+    mri_dummy = "MRI PNGs"
+
+    folders = []
+    for i in range(len(mri_data)):
+        brightness_folders = [f for f in os.listdir(rf"{path}{mri_data['patient_id'][i]}/{mri_dummy}") if not f.startswith(".DS_Store")]
+        # brightness_folders = os.listdir(rf"{PATH}{mri_data['patient_id'][i]}/{mri_dummy}")
+        folders.append(brightness_folders)
+
+    mri_data['Brightness Folders'] = folders
+
+    return mri_data
+
+def train_test(mri_data):
+    # Train/Test split
+    train_data, test_data = train_test_split(mri_data, test_size=0.25)
+    train_data = train_data.reset_index().drop(columns = 'index')
+    test_data = test_data.reset_index().drop(columns = 'index')
+
+    for i in range(len(train_data)):
+        train_data.loc[i, 'Start_Index'] = sum(train_data['Total Images'][:i])
+        
+    for i in range(len(test_data)):
+        test_data.loc[i, 'Start_Index'] = sum(test_data['Total Images'][:i])
+
+    return train_data, test_data
