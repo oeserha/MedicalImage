@@ -17,7 +17,7 @@ def connection(access_token):
     access_token=access_token,
     )
 
-    # client secret for CCG: HURbXCj4tTe675E2hVcyiWPP5i22PPhN
+    # client secret for CCG:
 
     client = Client(oauth)
 

@@ -2,6 +2,7 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 import matplotlib.pyplot as plt
+import pandas as pd
 
 def show_mask(mask, ax, random_color=False):
     if random_color:
@@ -44,6 +45,41 @@ def medsam_inference(medsam_model, img_embed, box_1024, H, W):
             mode="bilinear",
             align_corners=False,
         )  # (1, 1, gt.shape)
-        low_res_pred = low_res_pred.squeeze().cpu().numpy()  # (256, 256)
-        medsam_seg = (low_res_pred > 0.5).astype(np.uint8)
-        return medsam_seg
+        low_res_pred = low_res_pred.squeeze().cpu()
+        pred = torch.argmax(low_res_pred, dim=1)
+        return pred
+    
+def medsam_test_results(test_loader, medsam_model, device):
+    results = pd.DataFrame(columns = ["Patient", "Brightness", "Accuracy"])
+    for x, y, patient, b_level in test_loader:
+        img = x
+        B, H, W = img.size()
+        img_3c = img.repeat(3, 1, 1, 1).view(B, 3, H, W).to(device)
+
+        box_np = torch.Tensor(np.array([[0, 0, W, H]])).to(device)
+
+        with torch.no_grad():
+            image_embedding = medsam_model.image_encoder(img_3c) # (1, 256, 64, 64)
+        
+        medsam_seg = medsam_inference(medsam_model, image_embedding, box_np, H, W)
+
+        acc = (torch.tensor(medsam_seg) == y).float().mean(dim=(1, 2))
+        results = pd.concat([results, pd.DataFrame({"Patient": patient, "Brightness": b_level, "Accuracy": acc})])
+
+    return results
+
+def medsam_training(train_loader, medsam_model, device):
+    # set objective fcn
+    for x, y, patient, b_level in train_loader:
+        img = x
+        B, H, W = img.size()
+        img_3c = img.repeat(3, 1, 1, 1).view(B, 3, H, W).to(device)
+
+        box_np = torch.Tensor(np.array([[0, 0, W, H]])).to(device)
+
+        with torch.no_grad():
+            image_embedding = medsam_model.image_encoder(img_3c) # (1, 256, 64, 64)
+        
+        medsam_seg = medsam_inference(medsam_model, image_embedding, box_np, H, W)
+        # get loss
+    pass

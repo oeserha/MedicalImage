@@ -3,6 +3,8 @@ from torch.utils.data import Dataset
 import numpy as np
 from PIL import Image
 import torch.nn.functional as F
+import pandas as pd
+import os
 
 class CancerDataset(Dataset):
     def __init__(self, labels, path, train=True, transform=None, target_transform=None):
@@ -54,8 +56,7 @@ class CancerDataset(Dataset):
 
         # Load and process segmentation mask
         try:
-            seg_path = row['PNG segmentation']
-            label = np.array(Image.open(f'{seg_path}/segpng_{img_idx}.png'))
+            label = np.array(Image.open(f'{self.path}{patient}/Seg PNGs/segpng_{img_idx}.png'))
             
             label_classes = torch.zeros(label.shape, dtype=torch.long)
             
@@ -77,11 +78,15 @@ class CancerDataset(Dataset):
             label_classes = label_classes.squeeze(0).squeeze(0).long() 
             
         except Exception as e:
-            print(f"Error loading mask: {seg_path}/segpng_{img_idx}.png")
+            print(f"Error loading mask: {self.path}{patient}/Seg PNGs/segpng_{img_idx}.png")
             print(f"Error: {str(e)}")
             return None 
+        
+        # convert to tensor
+        image = torch.Tensor(np.array(image))
+        image = torch.Tensor(np.array(label_classes))
 
-        return image, label_classes, patient, bright_level 
+        return image, label_classes, patient, bright_id 
 
 def get_mri_data(path = None):
     if path is not None:

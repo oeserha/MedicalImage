@@ -17,7 +17,6 @@ from boxsdk import OAuth2
 from boxsdk import Client
 import monai
 import shutil
-# from io import StringIO
 
 # import src.dataloader_box as dl_box
 import src.dataloader_local as dl_local
