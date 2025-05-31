@@ -12,7 +12,7 @@ from src.medsam_helper import medsam_test_results
 
 def get_base_results(test_loader):
     # load model weights
-    MedSAM_CKPT_PATH = "/home/ra-ugrad/Documents/Haleigh/MedicalImage/models/medsam_vit_b.pth"
+    MedSAM_CKPT_PATH = "./models/medsam_vit_b.pth"
     medsam_model = sam_model_registry['vit_b'](checkpoint=MedSAM_CKPT_PATH)
 
     # adjust model for task
@@ -26,6 +26,9 @@ def get_base_results(test_loader):
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     medsam_model = medsam_model.to(device)
+
+    # save model
+    torch.save(medsam_model.state_dict(), './models/base_medsam_model.pth') 
 
     # get test results
     medsam_model.eval()

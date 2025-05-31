@@ -11,50 +11,6 @@ import os
 #TODO: edit path
 PATH = "/home/ra-ugrad/Documents/Segmentations/"
 
-# Access MRI data folder
-def get_mri_data(path = None):
-    if path is not None:
-        FILE_PATH = path
-    else:
-        FILE_PATH = 'seg_list_test.xlsx'
-
-    mri_data = pd.read_excel(FILE_PATH, sheet_name="Sheet1")
-    return mri_data
-
-# Additional Fields for MRI Data
-def clean_mri_data(mri_data):
-    mri_data['Total Images'] = mri_data['Number of Slices'] * mri_data['Number of Brightness Levels']
-    mri_data['Start_Index'] = 0
-
-    mri_data.rename(columns={"MRI/Patient ID": "patient_id"}, inplace=True)
-    mri_data = mri_data.reset_index()
-    mri_dummy = "MRI PNGs"
-
-    folders = []
-    for i in range(len(mri_data)):
-        brightness_folders = os.listdir(rf"{PATH}{mri_data['patient_id'][i]}/{mri_dummy}")
-        if brightness_folders.__contains__(".DS_Store"):
-            brightness_folders.remove(".DS_Store")
-        folders.append(brightness_folders)
-
-    mri_data['Brightness Folders'] = folders
-
-    return mri_data
-
-def train_test(mri_data):
-    # Train/Test split
-    train_data, test_data = train_test_split(mri_data, test_size=0.25)
-    train_data = train_data.reset_index().drop(columns = 'index')
-    test_data = test_data.reset_index().drop(columns = 'index')
-
-    for i in range(len(train_data)):
-        train_data.loc[i, 'Start_Index'] = sum(train_data['Total Images'][:i])
-        
-    for i in range(len(test_data)):
-        test_data.loc[i, 'Start_Index'] = sum(test_data['Total Images'][:i])
-
-    return train_data, test_data
-
 class CancerDataset(Dataset):
     def __init__(self, labels, path, train=True, transform=None, target_transform=None):
         self.img_labels = labels
@@ -136,3 +92,48 @@ class CancerDataset(Dataset):
         image = torch.Tensor(np.array(label_classes))
 
         return image, label_classes, patient, bright_id 
+
+# Access MRI data folder
+def get_mri_data(path = None):
+    if path is not None:
+        FILE_PATH = path
+    else:
+        FILE_PATH = 'seg_list_test.xlsx'
+
+    mri_data = pd.read_excel(FILE_PATH, sheet_name="Sheet1")
+    return mri_data
+
+# Additional Fields for MRI Data
+def clean_mri_data(mri_data):
+    mri_data['Total Images'] = mri_data['Number of Slices'] * mri_data['Number of Brightness Levels']
+    mri_data['Start_Index'] = 0
+
+    mri_data.rename(columns={"MRI/Patient ID": "patient_id"}, inplace=True)
+    mri_data = mri_data.reset_index()
+    mri_dummy = "MRI PNGs"
+
+    folders = []
+    for i in range(len(mri_data)):
+        brightness_folders = os.listdir(rf"{PATH}{mri_data['patient_id'][i]}/{mri_dummy}")
+        if brightness_folders.__contains__(".DS_Store"):
+            brightness_folders.remove(".DS_Store")
+        folders.append(brightness_folders)
+
+    mri_data['Brightness Folders'] = folders
+
+    return mri_data
+
+def train_test(mri_data):
+    # Train/Test split
+    train_data, test_data = train_test_split(mri_data, test_size=0.25)
+    train_data = train_data.reset_index().drop(columns = 'index')
+    test_data = test_data.reset_index().drop(columns = 'index')
+
+    for i in range(len(train_data)):
+        train_data.loc[i, 'Start_Index'] = sum(train_data['Total Images'][:i])
+        
+    for i in range(len(test_data)):
+        test_data.loc[i, 'Start_Index'] = sum(test_data['Total Images'][:i])
+
+    return train_data, test_data
+
