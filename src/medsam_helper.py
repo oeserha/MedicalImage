@@ -5,10 +5,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import torch.nn as nn
 
-from tqdm import tqdm
-import monai
-import numpy as np
-import torch.nn.functional as F
+from utils import calculate_iou
 
 def show_mask(mask, ax, random_color=False):
     if random_color:
@@ -52,13 +49,15 @@ def medsam_inference(medsam_model, img_embed, box_1024, H, W):
             align_corners=False,
         )  # (1, 1, gt.shape)
         low_res_pred = low_res_pred.squeeze().cpu()
-        # pred = torch.argmax(low_res_pred, dim=1) #TODO: change this to be outside inference
         return low_res_pred
     
 def medsam_test_results(test_loader, medsam_model, device):
-    results = pd.DataFrame(columns = ["Patient", "Brightness", "Accuracy"])
-    for x, y, patient, b_level in test_loader:
-        img = x
+    results = pd.DataFrame(columns = ["Patient", "Brightness", "Accuracy", "IoU_0", "IoU_1", "IoU_2"
+                                      "IoU_3", "IoU_4", "IoU_5", "IoU_6", "IoU_mean"])
+    medsam_model = medsam_model.to(device)
+    for img, seg, patient, b_level in test_loader:
+        img = img.to(device)
+        seg = seg.to(device)
         B, H, W = img.size()
         img_3c = img.repeat(3, 1, 1, 1).view(B, 3, H, W).to(device)
 
@@ -70,63 +69,24 @@ def medsam_test_results(test_loader, medsam_model, device):
         medsam_seg = medsam_inference(medsam_model, image_embedding, box_np, H, W)
         pred = torch.argmax(medsam_seg, dim=1)
 
-        acc = (torch.tensor(pred).clone().detach() == y).float().mean(dim=(1, 2)) #TODO: would be helpful to see acc by mask
-        results = pd.concat([results, pd.DataFrame({"Patient": patient, "Brightness": b_level, "Accuracy": acc})])
+        acc = list((pred == seg).float().mean(dim =(1, 2)).cpu().numpy()) #TODO: would be helpful to see acc by mask
+        mean_iou, class_iou = calculate_iou(medsam_seg, y)
+
+
+        results = pd.concat([results, pd.DataFrame({"Patient": patient, 
+                                                    "Brightness": b_level, 
+                                                    "Accuracy": acc,
+                                                    "IoU_0": class_iou[0],
+                                                    "IoU_1": class_iou[1],
+                                                    "IoU_2": class_iou[2],
+                                                    "IoU_3": class_iou[3], 
+                                                    "IoU_4": class_iou[4],
+                                                    "IoU_5": class_iou[5],
+                                                    "IoU_6": class_iou[6],
+                                                    "IoU_mean": mean_iou,
+                                                    })]) 
 
     return results
-
-def medsam_training(train_loader, medsam_model, device):
-    medsam_model.train()
-    img_mask_encdec_params = list(medsam_model.image_encoder.parameters()) + list(
-        medsam_model.mask_decoder.parameters()
-    )
-    optimizer = torch.optim.AdamW(
-        img_mask_encdec_params, lr=1e-3, weight_decay=.01
-    )
-
-    seg_loss = monai.losses.DiceLoss(softmax=True, squared_pred=True, reduction="mean")
-    ce_loss = nn.CrossEntropyLoss()
-
-    num_epochs = 1
-    losses = []
-    accs = []
-        
-    for epoch in range(num_epochs):
-        for step, (img, seg, patient, b_level) in enumerate(tqdm(train_loader)):
-            optimizer.zero_grad()
-            B, H, W = img.size()
-
-            img_3c = img.repeat(3, 1, 1, 1).view(B, 3, H, W).to(device)
-            boxes_np = torch.Tensor(np.array([[0, 0, W, H]])).detach().cpu().numpy()
-            img, seg = img.to(device), seg.to(device)
-
-            logits = medsam_model(img_3c, boxes_np)
-            target_1hot = F.one_hot(seg, num_classes=logits.shape[1])
-            target_1hot = target_1hot.permute(0, 3, 1, 2).float()
-            pred = torch.argmax(logits, dim=1)
-
-            acc = (torch.tensor(pred).clone().detach() == seg).float().mean(dim=(1, 2))
-            accs.append(acc.item())
-
-            loss = seg_loss(logits, target_1hot) + ce_loss(logits, seg)
-            losses.append(loss.item())
-            loss.backward()
-            optimizer.step()
-            optimizer.zero_grad()
-        
-    plt.plot(losses)
-    plt.title("Dice + Cross Entropy Loss")
-    plt.xlabel("Train Step")
-    plt.ylabel("Loss")
-    plt.save("./figs/tuned_losses.png")
-
-    plt.plot(accs)
-    plt.title("Pixel Accuracy")
-    plt.xlabel("Train Step")
-    plt.ylabel("Accuracy (All Masks)")
-    plt.save("./figs/tuned_losses.png")
-
-    return medsam_model
 
 class MedSAM(nn.Module):
     def __init__(

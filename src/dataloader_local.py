@@ -4,9 +4,11 @@ import pandas as pd
 import torch
 from PIL import Image
 from torch.utils.data import Dataset
+import torch.nn.functional as F
 import numpy as np
 from sklearn.model_selection import train_test_split
 import os
+import src.settings as settings
 
 #TODO: edit path
 PATH = "/home/ra-ugrad/Documents/Segmentations/"
@@ -98,7 +100,7 @@ def get_mri_data(path = None):
     if path is not None:
         FILE_PATH = path
     else:
-        FILE_PATH = 'seg_list_test.xlsx'
+        FILE_PATH = settings.SEGMENTATIONS_PATH
 
     mri_data = pd.read_excel(FILE_PATH, sheet_name="Sheet1")
     return mri_data
@@ -114,7 +116,7 @@ def clean_mri_data(mri_data):
 
     folders = []
     for i in range(len(mri_data)):
-        brightness_folders = os.listdir(rf"{PATH}{mri_data['patient_id'][i]}/{mri_dummy}")
+        brightness_folders = os.listdir(rf"{settings.SEGMENTATIONS_PATH}{mri_data['patient_id'][i]}/{mri_dummy}")
         if brightness_folders.__contains__(".DS_Store"):
             brightness_folders.remove(".DS_Store")
         folders.append(brightness_folders)

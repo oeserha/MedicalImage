@@ -1,11 +1,10 @@
 numpy
-torch
-matplotlib
-boxsdk
 pandas
-Pillow
+matplotlib
 scikit-learn
-torchvision
-segment_anything
 scikit-image
+torch
+torchvision
+Pillow
 monai
+segment_anything
