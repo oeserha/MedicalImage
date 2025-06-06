@@ -11,7 +11,7 @@ from torchvision import transforms
 from monai.losses import DiceLoss
 from tqdm import tqdm
 
-from dataloader_local import CancerDataset
+from src.data_helper import CancerDataset
 from src.utils import calculate_iou
 from src.utils import get_class_weights
 import src.settings as settings
@@ -100,7 +100,7 @@ def set_data_loaders(train_data, test_data):
 
     return train_loader, test_loader
 
-def train_dino(train_loader, device):
+def train_dino(train_loader, device, num_epochs=10):
     print("Creating model...")
     model = DINOv2Segmentation()
     model = model.to(device)
@@ -128,7 +128,7 @@ def train_dino(train_loader, device):
     losses = []
     accs = []
 
-    for epoch in range(settings.NUM_EPOCHS):
+    for epoch in range(num_epochs):
         for step, (img, seg, patient, b_level) in enumerate(tqdm(train_loader)):
             img = img.to(device)
             seg = seg.to(device)
@@ -156,13 +156,13 @@ def train_dino(train_loader, device):
     plt.title("Dice + Cross Entropy Loss")
     plt.xlabel("Train Step")
     plt.ylabel("Loss")
-    plt.save(f"./figs/dino_train_loss_{settings.DATE}.png")
+    plt.savefig(f"./figs/dino_train_loss_{settings.DATE}.png")
 
     plt.plot(accs)
     plt.title("Pixel Accuracy")
     plt.xlabel("Train Step")
     plt.ylabel("Accuracy (All Masks)")
-    plt.save(f"./figs/dino_train_acc_{settings.DATE}.png")
+    plt.savefig(f"./figs/dino_train_acc_{settings.DATE}.png")
 
     print("Saving model...")
     torch.save(model.state_dict(), f'./models/dinov2_model_{settings.DATE}.pth')
