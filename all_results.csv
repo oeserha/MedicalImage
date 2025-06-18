@@ -1,0 +1,125 @@
+Patient,Brightness,Accuracy,IOU_0,IOU_1,IOU_2,IOU_3,IOU_4,IOU_5,IOU_6,IOU_mean,Model
+ACRIN 6698_932998,Brightness level 1,0.06,0,0.11,0,0,0.01,0,0,0.02,Base
+ACRIN 6698_932998,Brightness level 2,0.06,0,0.11,0,0,0.01,0,0,0.02,Base
+Duke_068,Brightness level 1,0.08,0,0.11,0,0,0.04,0,0,0.02,Base
+Duke_068,Brightness level 2,0.08,0,0.11,0,0,0.04,0,0,0.02,Base
+Duke_094,Brightness level 1,0.07,0,0.12,0,0,0.03,0,0,0.02,Base
+Duke_094,Brightness level 2,0.07,0,0.12,0,0,0.03,0,0,0.02,Base
+Duke_102,Brightness level 1,0.05,0,0.13,0,0,0.02,0,0,0.02,Base
+Duke_102,Brightness level 2,0.05,0,0.12,0,0,0.02,0,0,0.02,Base
+Duke_104,Brightness level 1,0.05,0,0.12,0,0,0.01,0,0,0.02,Base
+Duke_104,Brightness level 2,0.05,0,0.12,0,0,0.01,0,0,0.02,Base
+Duke_112,Brightness level 1,0.06,0,0.11,0,0,0.03,0,0,0.02,Base
+Duke_112,Brightness level 2,0.06,0,0.11,0,0,0.03,0,0,0.02,Base
+Duke_189,Brightness level 1,0.08,0,0.11,0,0,0.05,0,0,0.02,Base
+Duke_189,Brightness level 2,0.08,0,0.11,0,0,0.05,0,0,0.02,Base
+Duke_191,Brightness level 1,0.05,0,0.12,0,0,0.01,0,0,0.02,Base
+Duke_191,Brightness level 2,0.05,0,0.12,0,0,0.01,0,0,0.02,Base
+Duke_196,Brightness level 1,0,0,0,0,0,0,0,0,0,Base
+Duke_196,Brightness level 2,0,0,0,0,0,0,0,0,0,Base
+Duke_201,Brightness level 1,0.05,0,0.11,0.01,0,0.01,0,0,0.02,Base
+Duke_201,Brightness level 2,0.05,0,0.11,0.01,0,0.01,0,0,0.02,Base
+Duke_257,Brightness level 1,0,0,0,0,0,0,0,0,0,Base
+Duke_257,Brightness level 2,0,0,0,0,0,0,0,0,0,Base
+Duke_281,Brightness level 1,0.07,0,0.1,0.01,0,0.04,0,0,0.02,Base
+Duke_281,Brightness level 2,0.07,0,0.1,0.01,0,0.04,0,0,0.02,Base
+Duke_319,Brightness level 1,0.04,0,0.09,0,0,0,0,0,0.01,Base
+Duke_337,Brightness level 1,0,0,0.01,0,0,0,0,0,0,Base
+Duke_337,Brightness level 2,0,0,0.01,0,0,0,0,0,0,Base
+Estee_Duke_033,Brightness level 1,0.05,0,0.12,0,0,0.01,0,0,0.02,Base
+Estee_Duke_033,Brightness level 2,0.05,0,0.12,0,0,0.01,0,0,0.02,Base
+Nicole_Duke_047,Brightness level 1,0.05,0,0.15,0,0,0.01,0,0,0.02,Base
+Nicole_Duke_047,Brightness level 2,0.05,0,0.15,0,0,0.01,0,0,0.02,Base
+000133_2022-09-09,Brightness level 1,0.75,0.6,0.74,0,0.02,0,0,0,0.19,Tuned
+000133_2022-09-09,Brightness level 2,0.75,0.6,0.74,0,0.02,0,0,0,0.19,Tuned
+000165_2022-08-19,Brightness level 1,0.8,0.88,0.67,0,0.04,0,0,0,0.23,Tuned
+000165_2022-08-19,Brightness level 2,0.8,0.88,0.67,0,0.04,0,0,0,0.23,Tuned
+ACRIN 6698_253531,Brightness level 1,0.93,0.93,0.87,0,0.11,0,0,0,0.27,Tuned
+ACRIN 6698_253531,Brightness level 2,0.94,0.94,0.87,0,0.11,0,0,0,0.27,Tuned
+ACRIN 6698_283070,Brightness level 1,0.97,0.95,0.93,0,0,0,0,0,0.27,Tuned
+ACRIN 6698_378885,Brightness level 1,0.88,0.82,0.81,0,0.03,0,0,0,0.24,Tuned
+ACRIN 6698_378885,Brightness level 2,0.88,0.82,0.81,0,0.03,0,0,0,0.24,Tuned
+ACRIN 6698_649198,Brightness level 1,0.85,0.88,0.69,0,0.03,0,0,0,0.23,Tuned
+ACRIN 6698_649198,Brightness level 2,0.85,0.88,0.69,0,0.03,0,0,0,0.23,Tuned
+Duke_068,Brightness level 1,0.87,0.96,0.75,0,0.06,0,0,0,0.25,Tuned
+Duke_068,Brightness level 2,0.87,0.96,0.75,0,0.06,0,0,0,0.25,Tuned
+Duke_084,Brightness level 1,0.94,0.94,0.9,0,0.08,0,0,0,0.27,Tuned
+Duke_084,Brightness level 2,0.94,0.94,0.9,0,0.08,0,0,0,0.27,Tuned
+Duke_104,Brightness level 1,0.89,0.97,0.77,0,0.06,0,0,0,0.26,Tuned
+Duke_104,Brightness level 2,0.89,0.97,0.77,0,0.06,0,0,0,0.26,Tuned
+Duke_106,Brightness level 1,0.82,0.91,0.61,0,0.02,0,0,0,0.22,Tuned
+Duke_106,Brightness level 2,0.82,0.91,0.61,0,0.02,0,0,0,0.22,Tuned
+Duke_109,Brightness level 1,0.53,0.59,0.02,0,0.02,0,0,0,0.09,Tuned
+Duke_109,Brightness level 2,0.53,0.59,0.02,0,0.02,0,0,0,0.09,Tuned
+Duke_172,Brightness level 1,0.86,0.95,0.71,0,0.07,0,0,0,0.25,Tuned
+Duke_172,Brightness level 2,0.86,0.95,0.71,0,0.07,0,0,0,0.25,Tuned
+Duke_314,Brightness level 1,0.91,0.98,0.81,0,0.09,0,0,0,0.27,Tuned
+Duke_314,Brightness level 2,0.91,0.98,0.81,0,0.09,0,0,0,0.27,Tuned
+Duke_328,Brightness level 1,0.87,0.94,0.78,0,0.07,0,0,0,0.25,Tuned
+Duke_328,Brightness level 2,0.87,0.94,0.78,0,0.07,0,0,0,0.25,Tuned
+Rachel_Duke_052,Brightness level 1,0.92,0.97,0.83,0,0.05,0,0,0,0.26,Tuned
+Rachel_Duke_052,Brightness level 2,0.92,0.97,0.83,0,0.05,0,0,0,0.26,Tuned
+Rachel_Duke_054,Brightness level 1,0.9,0.95,0.78,0,0.05,0,0,0,0.25,Tuned
+Rachel_Duke_054,Brightness level 2,0.9,0.95,0.78,0,0.05,0,0,0,0.25,Tuned
+000133_2022-09-09,Brightness level 1,0.99,1,0.99,0.37,0.92,0.06,0,0,0.48,UNet
+000133_2022-09-09,Brightness level 2,0.99,1,0.99,0.37,0.91,0.06,0,0,0.48,UNet
+000165_2022-08-19,Brightness level 1,0.71,0.73,0.66,0.04,0.02,0.01,0,0,0.21,UNet
+000165_2022-08-19,Brightness level 2,0.72,0.73,0.67,0.04,0.03,0.01,0,0,0.21,UNet
+ACRIN 6698_283070,Brightness level 1,0.99,1,1,0.77,0.88,0.51,0,0,0.59,UNet
+ACRIN 6698_283070,Brightness level 2,0.99,1,1,0.78,0.88,0.54,0,0,0.6,UNet
+ACRIN 6698_378885,Brightness level 1,0.99,1,1,0.57,0.5,0.52,0,0,0.51,UNet
+ACRIN 6698_378885,Brightness level 2,0.99,1,1,0.58,0.5,0.52,0,0,0.51,UNet
+Duke_062,Brightness level 1,0.99,1,1,0.66,0.82,0.52,0,0,0.57,UNet
+Duke_062,Brightness level 2,0.99,1,1,0.68,0.82,0.54,0,0,0.58,UNet
+Duke_079,Brightness level 1,1,1,1,0.78,0.9,0.42,0,0,0.59,UNet
+Duke_079,Brightness level 2,1,1,1,0.78,0.9,0.44,0,0,0.59,UNet
+Duke_081,Brightness level 1,0.99,1,1,0.82,0.82,0.52,0,0,0.59,UNet
+Duke_081,Brightness level 2,0.99,1,1,0.83,0.82,0.53,0,0,0.6,UNet
+Duke_106,Brightness level 1,0.99,1,1,0.63,0.64,0.43,0,0,0.53,UNet
+Duke_106,Brightness level 2,0.99,1,1,0.63,0.64,0.44,0,0,0.53,UNet
+Duke_114,Brightness level 1,0.98,1,0.99,0.76,0.78,0.62,0,0,0.59,UNet
+Duke_114,Brightness level 2,0.98,1,1,0.8,0.82,0.65,0,0,0.61,UNet
+Duke_147,Brightness level 1,0.99,1,1,0.67,0.7,0.37,0,0,0.53,UNet
+Duke_147,Brightness level 2,0.99,1,1,0.68,0.69,0.38,0,0,0.54,UNet
+Duke_189,Brightness level 1,0.91,0.9,0.91,0.47,0.58,0.31,0,0,0.45,UNet
+Duke_189,Brightness level 2,0.91,0.89,0.9,0.48,0.58,0.32,0,0,0.45,UNet
+Duke_191,Brightness level 1,1,1,1,0,0,0,0,0,0.29,UNet
+Duke_326,Brightness level 1,0.99,0.99,0.54,0.81,0.24,0.04,0,0,0.38,UNet
+Duke_326,Brightness level 2,0.99,1,0.53,0.82,0.3,0.04,0,0,0.38,UNet
+Duke_328,Brightness level 1,1,1,1,0.82,0.95,0.53,0,0,0.61,UNet
+Duke_328,Brightness level 2,1,1,1,0.83,0.95,0.56,0,0,0.62,UNet
+Estee_Duke_033,Brightness level 1,0.98,0.97,0.98,0.41,0.57,0.27,0,0,0.46,UNet
+Estee_Duke_033,Brightness level 2,0.97,0.97,0.98,0.42,0.56,0.27,0,0,0.46,UNet
+Rachel_Duke_023,Brightness level 1,0.99,1,1,0.67,0.73,0.33,0,0,0.53,UNet
+Rachel_Duke_023,Brightness level 2,0.99,1,1,0.69,0.73,0.35,0,0,0.54,UNet
+000129_2022-08-12,Brightness level 1,0.89,0.91,0.86,0.01,0.15,0.01,0,0,0.28,DINO
+000129_2022-08-12,Brightness level 2,0.89,0.9,0.86,0.01,0.11,0.01,0,0,0.27,DINO
+000133_2022-09-09,Brightness level 1,0.82,0.71,0.85,0.01,0.11,0,0,0,0.24,DINO
+000133_2022-09-09,Brightness level 2,0.82,0.69,0.84,0.01,0.08,0,0,0,0.23,DINO
+ACRIN 6698_277831,Brightness level 1,0.96,0.97,0.95,0.22,0.41,0.17,0,0,0.39,DINO
+ACRIN 6698_277831,Brightness level 2,0.97,0.98,0.97,0.27,0.43,0.18,0,0,0.4,DINO
+ACRIN 6698_649198,Brightness level 1,0.77,0.73,0.68,0.01,0.04,0,0,0,0.21,DINO
+ACRIN 6698_649198,Brightness level 2,0.76,0.71,0.66,0.01,0.02,0,0,0,0.2,DINO
+Duke_078,Brightness level 1,0.95,0.95,0.94,0.09,0.35,0.06,0,0,0.34,DINO
+Duke_078,Brightness level 2,0.97,0.97,0.96,0.14,0.41,0.1,0,0,0.37,DINO
+Duke_084,Brightness level 1,0.96,0.96,0.93,0.06,0.29,0.02,0,0,0.32,DINO
+Duke_084,Brightness level 2,0.98,0.98,0.98,0.17,0.6,0.05,0,0,0.4,DINO
+Duke_094,Brightness level 1,0.96,0.99,0.95,0.04,0.56,0.07,0,0,0.37,DINO
+Duke_094,Brightness level 2,0.96,0.99,0.97,0.08,0.66,0.21,0,0,0.42,DINO
+Duke_104,Brightness level 1,0.93,0.96,0.91,0.06,0.3,0.03,0,0,0.32,DINO
+Duke_104,Brightness level 2,0.93,0.95,0.93,0.18,0.42,0.06,0,0,0.36,DINO
+Duke_114,Brightness level 1,0.84,0.81,0.84,0.03,0.1,0.02,0,0,0.26,DINO
+Duke_114,Brightness level 2,0.85,0.83,0.87,0.06,0.14,0.04,0,0,0.28,DINO
+Duke_133,Brightness level 1,0.95,0.96,0.93,0.04,0.32,0.16,0,0,0.34,DINO
+Duke_133,Brightness level 2,0.96,0.97,0.97,0.15,0.42,0.29,0,0,0.4,DINO
+Duke_196,Brightness level 1,0.53,0.54,0.01,0.17,0,0,0,0,0.1,DINO
+Duke_218,Brightness level 1,0.94,0.95,0.93,0.05,0.25,0.04,0,0,0.32,DINO
+Duke_218,Brightness level 2,0.96,0.96,0.97,0.16,0.46,0.08,0,0,0.38,DINO
+Duke_257,Brightness level 1,0.53,0.52,0.01,0.4,0.02,0,0,0,0.13,DINO
+Duke_257,Brightness level 2,0.52,0.5,0.01,0.44,0.02,0,0,0,0.14,DINO
+Duke_262,Brightness level 1,0.74,0.75,0.08,0.39,0.02,0.02,0,0,0.18,DINO
+Duke_262,Brightness level 2,0.77,0.78,0.1,0.47,0.06,0.01,0,0,0.2,DINO
+Duke_326,Brightness level 1,0.64,0.67,0.02,0.2,0.03,0,0,0,0.13,DINO
+Duke_326,Brightness level 2,0.67,0.69,0.02,0.3,0.04,0,0,0,0.15,DINO
+Rachel_Duke_054,Brightness level 1,0.89,0.88,0.84,0.04,0.14,0.01,0,0,0.27,DINO
+Rachel_Duke_054,Brightness level 2,0.89,0.87,0.89,0.1,0.2,0.03,0,0,0.3,DINO
